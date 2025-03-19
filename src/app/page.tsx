@@ -206,77 +206,69 @@ if (Object.keys(newErrors).length > 0) {
                   Donasi Anda membantu kami memelihara masjid dan mendukung program-program komunitas kami.
                 </DialogDescription>
               </DialogHeader>
-              <div className="px-6 py-4">
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="donation-amount" className="text-base font-medium">
-                      Pilih Jumlah Donasi
-                    </Label>
-                    <div className="grid grid-cols-3 gap-3 mb-3">
-                      <Button
-                        type="button"
-                        variant={donationAmount === "500000" ? "default" : "outline"}
-                        onClick={() => {
-                          setDonationAmount("500000")
-                          setCustomAmount("")
-                        }}
-                        className="text-center h-20 flex flex-col"
-                      >
-                        <span className="text-lg font-bold">Rp 500.000</span>
-                        <span className="text-xs mt-1">Donatur</span>
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={donationAmount === "1000000" ? "default" : "outline"}
-                        onClick={() => {
-                          setDonationAmount("1000000")
-                          setCustomAmount("")
-                        }}
-                        className="text-center h-20 flex flex-col"
-                      >
-                        <span className="text-lg font-bold">Rp 1.000.000</span>
-                        <span className="text-xs mt-1">Pendukung</span>
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={donationAmount === "2000000" ? "default" : "outline"}
-                        onClick={() => {
-                          setDonationAmount("2000000")
-                          setCustomAmount("")
-                        }}
-                        className="text-center h-20 flex flex-col"
-                      >
-                        <span className="text-lg font-bold">Rp 2.000.000</span>
-                        <span className="text-xs mt-1">Dermawan</span>
-                      </Button>
-                    </div>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">Rp</span>
-                      <Input
-                        id="donation-amount"
-                        className="pl-10 text-base"
-                        placeholder="Jumlah lainnya"
-                        value={customAmount}
-                        onChange={(e) => {
-                          // Only allow numbers
-                          const value = e.target.value.replace(/\D/g, "")
-                          setCustomAmount(value)
-                          if (value) {
-                            setDonationAmount("custom")
-                          } else {
-                            setDonationAmount("1000000")
-                          }
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <DialogFooter className="px-6 py-4 bg-muted/30">
-                <Button onClick={() => setStep(2)} className="w-full">
-                  Lanjutkan
-                </Button>
-              </DialogFooter>
+              <DialogHeader />
+<div className="px-4 py-3 sm:px-6 sm:py-4">
+  <div className="space-y-4">
+    <div className="space-y-2">
+      <Label htmlFor="donation-amount" className="text-sm font-medium">
+        Pilih Jumlah Donasi
+      </Label>
+      
+      {/* Grid Pilihan Donasi */}
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        <Button
+          type="button"
+          variant={donationAmount === "500000" ? "default" : "outline"}
+          onClick={() => {
+            setDonationAmount("500000")
+            setCustomAmount("")
+          }}
+          className="text-center h-14 md:h-16 flex flex-col text-sm md:text-base"
+        >
+          <span className="font-bold">Rp 500.000</span>
+        </Button>
+        <Button
+          type="button"
+          variant={donationAmount === "1000000" ? "default" : "outline"}
+          onClick={() => {
+            setDonationAmount("1000000")
+            setCustomAmount("")
+          }}
+          className="text-center h-14 md:h-16 flex flex-col text-sm md:text-base"
+        >
+          <span className="font-bold">Rp 1.000.000</span>
+        </Button>
+      </div>
+
+      {/* Input Custom Amount */}
+      <div className="relative">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm md:text-base">
+          Rp
+        </span>
+        <Input
+          id="donation-amount"
+          className="pl-8 text-sm md:text-base h-10 md:h-12"
+          placeholder="Jumlah lainnya"
+          value={customAmount}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, "")
+            setCustomAmount(value)
+            setDonationAmount(value ? "custom" : "1000000")
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+{/* Footer dengan Tombol Lanjutkan */}
+<DialogFooter className="px-4 py-3 sm:px-6 sm:py-4 bg-muted/30">
+  <Button onClick={() => setStep(2)} className="w-full h-12 md:h-14 text-sm md:text-base">
+    Lanjutkan
+  </Button>
+</DialogFooter>
+
+
             </>
           )}
 
@@ -286,108 +278,110 @@ if (Object.keys(newErrors).length > 0) {
                 <DialogTitle className="text-2xl">Informasi Donatur</DialogTitle>
                 <DialogDescription>Mohon lengkapi informasi Anda untuk melanjutkan donasi</DialogDescription>
               </DialogHeader>
-              <form onSubmit={handleDonationSubmit}>
-                <div className="px-6 py-2 space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className={errors.name ? "text-destructive" : ""}>
-                      Nama Lengkap <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="name"
-                      placeholder="Masukkan nama Anda"
-                      value={donorName}
-                      onChange={(e) => setDonorName(e.target.value)}
-                      className={errors.name ? "border-destructive" : ""}
-                    />
-                    {errors.name && <p className="text-destructive text-sm">{errors.name}</p>}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="Masukkan email Anda"
-                      value={donorEmail}
-                      onChange={(e) => setDonorEmail(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="phone" className={errors.phone ? "text-destructive" : ""}>
-                      Nomor Telepon <span className="text-destructive">*</span>
-                    </Label>
-                    <Input
-                      id="phone"
-                      placeholder="Masukkan nomor telepon Anda"
-                      value={donorPhone}
-                      onChange={(e) => setDonorPhone(e.target.value)}
-                      className={errors.phone ? "border-destructive" : ""}
-                    />
-                    {errors.phone && <p className="text-destructive text-sm">{errors.phone}</p>}
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Pesan (Opsional)</Label>
-                    <textarea
-                      id="message"
-                      className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      placeholder="Tulis pesan Anda di sini"
-                      value={donorMessage}
-                      onChange={(e) => setDonorMessage(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="bg-muted/30 p-4 rounded-lg border border-muted">
-                    <h3 className="font-medium text-lg mb-2">Ringkasan Donasi</h3>
-                    <div className="space-y-2">
-                    <div className="flex justify-between">
-      <span className="text-muted-foreground">Jumlah Donasi</span>
-      <span className="font-medium">
-        Rp{" "}
-        {donationAmount === "custom"
-          ? formatCurrency(Number(customAmount) || 0)
-          : formatCurrency(Number(donationAmount) || 0)}
-      </span>
+              <form onSubmit={handleDonationSubmit} className="max-h-[75vh] sm:max-h-none overflow-y-auto">
+  <div className="px-4 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
+    
+    {/* Nama Lengkap */}
+    <div className="space-y-1">
+      <Label htmlFor="name" className={errors.name ? "text-destructive" : ""}>
+        Nama Lengkap <span className="text-destructive">*</span>
+      </Label>
+      <Input
+        id="name"
+        placeholder="Masukkan nama Anda"
+        value={donorName}
+        onChange={(e) => setDonorName(e.target.value)}
+        className={`h-10 sm:h-12 ${errors.name ? "border-destructive" : ""}`}
+      />
+      {errors.name && <p className="text-destructive text-xs">{errors.name}</p>}
     </div>
-                    </div>
-                  </div>
-                </div>
-                <DialogFooter className="px-6 py-4 bg-muted/30 flex flex-col sm:flex-row gap-2">
-                  <Button type="button" variant="outline" onClick={() => setStep(1)} className="sm:w-1/3">
-                    Kembali
-                  </Button>
-                  <Button type="submit" className="sm:w-2/3" disabled={isSubmitting}>
-                    {isSubmitting ? (
-                      <>
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Memproses...
-                      </>
-                    ) : (
-                      "Lanjutkan ke Pembayaran"
-                    )}
-                  </Button>
-                </DialogFooter>
-              </form>
+
+    {/* Email */}
+    <div className="space-y-1">
+      <Label htmlFor="email">Email</Label>
+      <Input
+        id="email"
+        type="email"
+        placeholder="Masukkan email Anda"
+        value={donorEmail}
+        onChange={(e) => setDonorEmail(e.target.value)}
+        className="h-10 sm:h-12"
+      />
+    </div>
+
+    {/* Nomor Telepon */}
+    <div className="space-y-1">
+      <Label htmlFor="phone" className={errors.phone ? "text-destructive" : ""}>
+        Nomor Telepon <span className="text-destructive">*</span>
+      </Label>
+      <Input
+        id="phone"
+        placeholder="Masukkan nomor telepon Anda"
+        value={donorPhone}
+        onChange={(e) => setDonorPhone(e.target.value)}
+        className={`h-10 sm:h-12 ${errors.phone ? "border-destructive" : ""}`}
+      />
+      {errors.phone && <p className="text-destructive text-xs">{errors.phone}</p>}
+    </div>
+
+    {/* Pesan (Opsional) */}
+    <div className="space-y-1">
+      <Label htmlFor="message">Pesan (Opsional)</Label>
+      <textarea
+        id="message"
+        className="min-h-[60px] sm:min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        placeholder="Tulis pesan Anda di sini"
+        value={donorMessage}
+        onChange={(e) => setDonorMessage(e.target.value)}
+      />
+    </div>
+
+    {/* Ringkasan Donasi */}
+    <div className="bg-muted/30 p-3 sm:p-4 rounded-lg border border-muted text-sm sm:text-base">
+      <h3 className="font-medium mb-1 sm:mb-2">Ringkasan Donasi</h3>
+      <div className="flex justify-between">
+        <span className="text-muted-foreground">Jumlah Donasi</span>
+        <span className="font-medium">
+          Rp{" "}
+          {donationAmount === "custom"
+            ? formatCurrency(Number(customAmount) || 0)
+            : formatCurrency(Number(donationAmount) || 0)}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  {/* Footer Sticky agar tombol selalu terlihat */}
+  <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-muted p-3 sm:p-4 flex flex-col sm:flex-row gap-2">
+    <Button
+      type="button"
+      variant="outline"
+      onClick={() => setStep(1)}
+      className="w-full sm:w-1/3 h-10 sm:h-12 text-sm sm:text-base"
+    >
+      Kembali
+    </Button>
+    <Button
+      type="submit"
+      className="w-full sm:w-2/3 h-10 sm:h-12 text-sm sm:text-base"
+      disabled={isSubmitting}
+    >
+      {isSubmitting ? (
+        <>
+          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Memproses...
+        </>
+      ) : (
+        "Lanjutkan ke Pembayaran"
+      )}
+    </Button>
+  </div>
+</form>
+
+
             </>
           )}
 
@@ -397,82 +391,81 @@ if (Object.keys(newErrors).length > 0) {
                 <DialogTitle className="text-2xl">Informasi Pembayaran</DialogTitle>
                 <DialogDescription>Silakan transfer donasi Anda ke rekening berikut</DialogDescription>
               </DialogHeader>
-              <div className="px-6 py-4">
-                <div className="bg-muted/30 p-5 rounded-lg border border-muted mb-6">
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Bank</span>
-                      <span className="font-medium text-base">Bank Syariah Indonesia</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Nomor Rekening</span>
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-base select-all">7890 1234 5678 90</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6"
-                          onClick={() => {
-                            navigator.clipboard.writeText("7890123456789")
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="lucide lucide-copy"
-                          >
-                            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-                          </svg>
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Atas Nama</span>
-                      <span className="font-medium text-base">Yayasan Masjid Jami As-Salam</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-  <span className="text-muted-foreground">Jumlah Transfer</span>
-  <span className="font-bold text-lg text-primary">
-    Rp{" "}
-    {donationAmount === "custom"
-      ? formatCurrency(Number(customAmount) || 0)
-      : formatCurrency(Number(donationAmount) || 0)}
-  </span>
+              <div className="px-4 sm:px-6 py-3 sm:py-4">
+  <div className="bg-muted/30 p-4 sm:p-5 rounded-lg border border-muted mb-4 sm:mb-6 max-w-lg mx-auto">
+    <div className="space-y-3 sm:space-y-4">
+      <div className="flex justify-between items-center text-sm sm:text-base">
+        <span className="text-muted-foreground">Bank</span>
+        <span className="font-medium">Bank Syariah Indonesia</span>
+      </div>
+      <div className="flex justify-between items-center text-sm sm:text-base">
+        <span className="text-muted-foreground">Nomor Rekening</span>
+        <div className="flex items-center gap-2">
+          <span className="font-medium select-all">7890 1234 5678 90</span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-5 w-5 sm:h-6 sm:w-6"
+            onClick={() => navigator.clipboard.writeText("7890123456789")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="lucide lucide-copy"
+            >
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+            </svg>
+          </Button>
+        </div>
+      </div>
+      <div className="flex justify-between items-center text-sm sm:text-base">
+        <span className="text-muted-foreground">Atas Nama</span>
+        <span className="font-medium">Yayasan Masjid Jami As-Salam</span>
+      </div>
+      <div className="flex justify-between items-center text-sm sm:text-lg">
+        <span className="text-muted-foreground">Jumlah Transfer</span>
+        <span className="font-bold text-primary">
+          Rp{" "}
+          {donationAmount === "custom"
+            ? formatCurrency(Number(customAmount) || 0)
+            : formatCurrency(Number(donationAmount) || 0)}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div className="flex flex-col items-center justify-center space-y-3 sm:space-y-4 py-3 sm:py-4 max-w-lg mx-auto">
+    <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-full bg-primary/20 flex items-center justify-center">
+      <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+    </div>
+    <h3 className="text-lg sm:text-xl font-medium">Terima Kasih!</h3>
+    <p className="text-center text-sm sm:text-base text-muted-foreground">
+      Donasi Anda telah berhasil dicatat. Silakan transfer sesuai jumlah yang tertera dan simpan bukti transfer Anda.
+    </p>
+    <div className="bg-primary/10 p-2 sm:p-3 rounded-lg text-xs sm:text-sm text-center w-full max-w-md">
+      <p className="font-medium text-primary">ID Transaksi: {transactionId}</p>
+      <p className="text-muted-foreground mt-1">
+        Harap sertakan ID Transaksi ini pada keterangan transfer Anda
+      </p>
+    </div>
+  </div>
 </div>
 
-                  </div>
-                </div>
+<DialogFooter className="px-4 sm:px-6 py-3 sm:py-4 bg-muted/30">
+  <Button onClick={() => handleDialogClose()} className="w-full max-w-md mx-auto">
+    Selesai
+  </Button>
+</DialogFooter>
 
-                <div className="flex flex-col items-center justify-center space-y-4 py-4">
-                  <div className="h-16 w-16 rounded-full bg-primary/20 flex items-center justify-center">
-                    <Heart className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-medium">Terima Kasih!</h3>
-                  <p className="text-center text-muted-foreground">
-                    Donasi Anda telah berhasil dicatat. Silakan transfer sesuai dengan jumlah yang tertera dan simpan
-                    bukti transfer Anda.
-                  </p>
-                  <div className="bg-primary/10 p-3 rounded-lg text-sm text-center w-full">
-                    <p className="font-medium text-primary">ID Transaksi: {transactionId}</p>
-                    <p className="text-muted-foreground mt-1">
-                      Harap sertakan ID Transaksi ini pada keterangan transfer Anda
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <DialogFooter className="px-6 py-4 bg-muted/30">
-                <Button onClick={() => handleDialogClose()} className="w-full">
-                  Selesai
-                </Button>
-              </DialogFooter>
+
             </>
           )}
         </DialogContent>
@@ -514,56 +507,58 @@ if (Object.keys(newErrors).length > 0) {
           <div className="flex items-center gap-4">
             <DonationModal triggerButton={<Button className="hidden md:inline-flex">Donasi</Button>} />
 
-            {/* Mobile Navigation */}
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="md:hidden">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Toggle menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-[300px] sm:w-[400px] bg-white border-l border-gray-200"
-                style={{ backgroundColor: "white" }}
-              >
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
-                        <span className="text-primary-foreground font-semibold text-xs">JAS</span>
-                      </div>
-                      <span className="font-semibold">Masjid Jami As-Salam</span>
-                    </div>
-                  </div>
+           {/* Mobile Navigation */}
+<Sheet>
+  <SheetTrigger asChild>
+    <Button variant="outline" size="icon" className="md:hidden">
+      <Menu className="h-5 w-5" />
+      <span className="sr-only">Toggle menu</span>
+    </Button>
+  </SheetTrigger>
+  <SheetContent
+    side="right"
+    className="w-[300px] sm:w-[400px] bg-white border-l border-gray-200 p-6 flex flex-col"
+  >
+    {/* Header Mobile Navigation */}
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-2">
+        <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+          <span className="text-primary-foreground font-semibold text-xs">
+            JAS
+          </span>
+        </div>
+        <span className="font-semibold text-lg">Masjid Jami As-Salam</span>
+      </div>
+    </div>
 
-                  <nav className="flex flex-col gap-4">
-  {navLinks.map((link) => (
-    <button
-      key={link.id}
-      onClick={() => {
-        scrollToSection(link.id);
-        const element = document.querySelector('[data-state="open"]');
-        if (element instanceof HTMLElement) {
-          element.click();
-        }
-      }}
-      className={`flex items-center py-2 text-lg font-medium transition-colors hover:text-primary ${
-        activeSection === link.id ? "text-primary" : ""
-      }`}
-    >
-      {link.name}
-    </button>
-  ))}
-</nav>
+    {/* Navigation Links */}
+    <nav className="flex flex-col gap-4">
+      {navLinks.map((link) => (
+        <button
+          key={link.id}
+          onClick={() => {
+            scrollToSection(link.id);
+            const element = document.querySelector('[data-state="open"]');
+            if (element instanceof HTMLElement) {
+              element.click();
+            }
+          }}
+          className={`flex items-center py-2 text-lg font-medium transition-colors hover:text-primary ${
+            activeSection === link.id ? "text-primary font-semibold" : "text-gray-700"
+          }`}
+        >
+          {link.name}
+        </button>
+      ))}
+    </nav>
 
+    {/* Tombol Donasi */}
+    <div className="mt-auto pt-6">
+      <DonationModal triggerButton={<Button className="w-full">Donasi</Button>} />
+    </div>
+  </SheetContent>
+</Sheet>
 
-                  <div className="mt-auto pt-6">
-                    <DonationModal triggerButton={<Button className="w-full">Donasi</Button>} />
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
           </div>
         </div>
       </header>
@@ -677,7 +672,7 @@ if (Object.keys(newErrors).length > 0) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h3 className="text-2xl font-bold">Sejarah Kami</h3>
+                <h3 className="text-2xl font-bold pt-4 text-center sm:text-left">Sejarah Kami</h3>
                 <p className="text-muted-foreground">
                   Masjid Jami As-Salam didirikan pada tahun 1995 oleh sekelompok Muslim yang berdedikasi untuk
                   menciptakan tempat ibadah dan pusat komunitas bagi umat Islam di daerah ini. Selama bertahun-tahun,
@@ -687,7 +682,10 @@ if (Object.keys(newErrors).length > 0) {
                   Kami menawarkan berbagai layanan termasuk sholat lima waktu, sholat Jumat, kelas Quran, program
                   pendidikan Islam untuk anak-anak dan dewasa, serta berbagai kegiatan sosial dan amal.
                 </p>
-                <h3 className="text-2xl font-bold pt-4">Visi & Misi</h3>
+                <h3 className="text-2xl font-bold pt-4 text-center sm:text-left">
+  Visi & Misi
+</h3>
+
                 <p className="text-muted-foreground">
                   Visi kami adalah menjadi pusat keunggulan Islam yang melayani kebutuhan spiritual, pendidikan, dan
                   sosial komunitas Muslim. Misi kami adalah menyediakan lingkungan yang ramah dan inklusif di mana
@@ -838,18 +836,18 @@ if (Object.keys(newErrors).length > 0) {
               </div>
               <div className="relative h-[400px] rounded-xl overflow-hidden shadow-xl">
                 {/* This would be a map in a real application */}
-                <div
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{
-                    backgroundImage:
-                      "url('https://images.unsplash.com/photo-1569336415962-a4bd9f69c07a?q=80&w=1000&auto=format&fit=crop')",
-                  }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Button variant="outline" className="text-white border-white hover:bg-white/20 hover:text-white">
-                    Lihat di Google Maps
-                  </Button>
-                </div>
+                <div className="relative w-full h-[300px] sm:h-[400px] rounded-lg overflow-hidden">
+  <iframe
+    className="absolute inset-0 w-full h-full"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d588.9510474585584!2d106.72558767104849!3d-6.772946105999751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69cd6608c2a271%3A0xce94ee8b0dcc1099!2sMasjid%20Jami%20Assalam!5e0!3m2!1sid!2sid!4v1742307596267!5m2!1sid!2sid"
+    allowFullScreen
+    loading="lazy"
+    referrerPolicy="no-referrer-when-downgrade"
+  />
+</div>
+
+
+
               </div>
             </div>
           </div>
